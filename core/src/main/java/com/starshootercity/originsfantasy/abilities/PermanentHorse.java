@@ -3,7 +3,9 @@ package com.starshootercity.originsfantasy.abilities;
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import com.starshootercity.Origin;
 import com.starshootercity.OriginSwapper;
+import com.starshootercity.OriginsReborn;
 import com.starshootercity.abilities.AbilityRegister;
+import com.starshootercity.abilities.BreakSpeedModifierAbility;
 import com.starshootercity.abilities.VisibleAbility;
 import com.starshootercity.events.PlayerSwapOriginEvent;
 import com.starshootercity.originsfantasy.FantasyEntityDismountEvent;
@@ -26,11 +28,12 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class PermanentHorse implements VisibleAbility, Listener {
+public class PermanentHorse implements VisibleAbility, Listener, BreakSpeedModifierAbility {
     @Override
     public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
         return OriginSwapper.LineData.makeLineFor("You are half horse, half human.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
@@ -163,4 +166,37 @@ public class PermanentHorse implements VisibleAbility, Listener {
     }
 
     private final NamespacedKey key = new NamespacedKey(OriginsFantasy.getInstance(), "mount-key");
+
+    @Override
+    public BlockMiningContext provideContextFor(Player player) {
+        boolean aquaAffinity = false;
+        ItemStack helmet = player.getInventory().getHelmet();
+        if (helmet != null) {
+            if (helmet.containsEnchantment(OriginsReborn.getNMSInvoker().getAquaAffinityEnchantment()))
+                aquaAffinity = true;
+        }
+        boolean onGround = true;
+        for (Entity entity : player.getNearbyEntities(4, 4, 4)) {
+            if (entity.getPersistentDataContainer().has(key)) {
+                if (entity.getPassengers().contains(player)) {
+                    onGround = entity.isOnGround();
+                    break;
+                }
+            }
+        }
+        return new BlockMiningContext(
+                player.getInventory().getItemInMainHand(),
+                player.getPotionEffect(OriginsReborn.getNMSInvoker().getMiningFatigueEffect()),
+                player.getPotionEffect(OriginsReborn.getNMSInvoker().getHasteEffect()),
+                player.getPotionEffect(PotionEffectType.CONDUIT_POWER),
+                OriginsReborn.getNMSInvoker().isUnderWater(player),
+                aquaAffinity,
+                onGround
+        );
+    }
+
+    @Override
+    public boolean shouldActivate(Player player) {
+        return true;
+    }
 }
