@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OriginsFantasy extends OriginsAddon {
-
     @Override
     public @NotNull String getNamespace() {
         return "fantasyorigins";
@@ -85,9 +84,10 @@ public class OriginsFantasy extends OriginsAddon {
             case "1.20.2" -> new FantasyNMSInvokerV1_20_2();
             case "1.20.3" -> new FantasyNMSInvokerV1_20_3();
             case "1.20.4" -> new FantasyNMSInvokerV1_20_4();
-            case "1.20.5" -> new FantasyNMSInvokerV1_20_5();
-            case "1.20.6" -> new FantasyNMSInvokerV1_20_6();
+            case "1.20.5", "1.20.6" -> new FantasyNMSInvokerV1_20_6();
             case "1.21" -> new FantasyNMSInvokerV1_21();
+            case "1.21.1" -> new FantasyNMSInvokerV1_21_1();
+            case "1.21.2", "1.21.3" -> new FantasyNMSInvokerV1_21_3();
             default -> throw new IllegalStateException("Unexpected version: " + Bukkit.getMinecraftVersion() + " only versions 1.20 - 1.20.6 are supported");
         };
         Bukkit.getPluginManager().registerEvents(getNMSInvoker(), getInstance());
@@ -100,5 +100,14 @@ public class OriginsFantasy extends OriginsAddon {
     @Override
     public void onRegister() {
         initializeNMSInvoker();
+        saveDefaultConfig();
+
+        if (!getConfig().contains("arrow-speed-multiplier")) {
+            getConfig().set("arrow-speed-multiplier", 2);
+            getConfig().set("arrow-damage-increase", 3);
+            getConfig().setComments("arrow-speed-multiplier", List.of("Amount to multiply arrow speed by when using the Increased Arrow Speed ability"));
+            getConfig().setComments("arrow-damage-increase", List.of("Amount to increase arrow damage by when using the Increased Arrow Damage ability"));
+            saveConfig();
+        }
     }
 }

@@ -1,11 +1,13 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.starshootercity.OriginSwapper;
+import com.starshootercity.OriginsReborn;
 import com.starshootercity.abilities.Ability;
 import com.starshootercity.abilities.AttributeModifierAbility;
 import com.starshootercity.abilities.MultiAbility;
 import com.starshootercity.abilities.VisibleAbility;
 import net.kyori.adventure.key.Key;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
@@ -39,7 +41,7 @@ public class EndBoost implements VisibleAbility, MultiAbility {
 
         @Override
         public @NotNull Attribute getAttribute() {
-            return Attribute.GENERIC_ATTACK_DAMAGE;
+            return OriginsReborn.getNMSInvoker().getAttackDamageAttribute();
         }
 
         @Override
@@ -49,7 +51,7 @@ public class EndBoost implements VisibleAbility, MultiAbility {
 
         @Override
         public double getChangedAmount(Player player) {
-            return 1.6;
+            return player.getWorld().getEnvironment() == World.Environment.THE_END ? 1.6 : 0;
         }
 
         @Override
@@ -73,7 +75,7 @@ public class EndBoost implements VisibleAbility, MultiAbility {
 
         @Override
         public @NotNull Attribute getAttribute() {
-            return Attribute.GENERIC_MAX_HEALTH;
+            return OriginsReborn.getNMSInvoker().getMaxHealthAttribute();
         }
 
         @Override
@@ -83,7 +85,7 @@ public class EndBoost implements VisibleAbility, MultiAbility {
 
         @Override
         public double getChangedAmount(Player player) {
-            return 20;
+            return player.getWorld().getEnvironment() == World.Environment.THE_END ? 20 : 0;
         }
 
         @Override

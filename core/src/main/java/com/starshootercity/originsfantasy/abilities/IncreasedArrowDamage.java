@@ -17,7 +17,7 @@ import java.util.List;
 public class IncreasedArrowDamage implements VisibleAbility, Listener {
     @Override
     public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("All arrows you shoot deal double damage.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+        return OriginSwapper.LineData.makeLineFor("All arrows you shoot deal increased damage.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
     }
 
     @Override
@@ -40,7 +40,8 @@ public class IncreasedArrowDamage implements VisibleAbility, Listener {
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager().getPersistentDataContainer().has(key)) {
-            event.setDamage(event.getDamage() * 2);
+            int v = OriginsFantasy.getInstance().getConfig().getInt("arrow-damage-increase", 3);
+            event.setDamage(event.getDamage() + v);
         }
     }
 }

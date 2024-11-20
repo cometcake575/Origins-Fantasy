@@ -1,6 +1,7 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.starshootercity.OriginSwapper;
+import com.starshootercity.OriginsReborn;
 import com.starshootercity.abilities.AttributeModifierAbility;
 import com.starshootercity.abilities.VisibleAbility;
 import net.kyori.adventure.key.Key;
@@ -28,7 +29,7 @@ public class Stronger implements VisibleAbility, AttributeModifierAbility {
 
     @Override
     public @NotNull Attribute getAttribute() {
-        return Attribute.GENERIC_ATTACK_DAMAGE;
+        return OriginsReborn.getNMSInvoker().getAttackDamageAttribute();
     }
 
     @Override

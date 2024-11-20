@@ -1,10 +1,10 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.starshootercity.OriginSwapper;
+import com.starshootercity.OriginsReborn;
 import com.starshootercity.abilities.AbilityRegister;
 import com.starshootercity.abilities.VisibleAbility;
 import net.kyori.adventure.key.Key;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,10 +33,10 @@ public class Leeching implements VisibleAbility, Listener {
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity().getKiller() == null) return;
         AbilityRegister.runForAbility(event.getEntity().getKiller(), getKey(), () -> {
-            AttributeInstance mH = event.getEntity().getKiller().getAttribute(Attribute.GENERIC_MAX_HEALTH);
+            AttributeInstance mH = event.getEntity().getKiller().getAttribute(OriginsReborn.getNMSInvoker().getMaxHealthAttribute());
             if (mH == null) return;
             double maxHealth = mH.getValue();
-            AttributeInstance mobMH = event.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH);
+            AttributeInstance mobMH = event.getEntity().getAttribute(OriginsReborn.getNMSInvoker().getMaxHealthAttribute());
             if (mobMH == null) return;
             double mobMaxHealth = mobMH.getValue();
             event.getEntity().getKiller().setHealth(Math.min(maxHealth, event.getEntity().getKiller().getHealth() + (mobMaxHealth / 5)));

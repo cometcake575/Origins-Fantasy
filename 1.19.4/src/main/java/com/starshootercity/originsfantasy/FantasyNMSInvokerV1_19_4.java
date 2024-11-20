@@ -27,6 +27,11 @@ public class FantasyNMSInvokerV1_19_4 extends FantasyNMSInvoker {
     }
 
     @Override
+    public @NotNull Attribute getAttackSpeedAttribute() {
+        return Attribute.GENERIC_ATTACK_SPEED;
+    }
+
+    @Override
     public void transferDamageEvent(LivingEntity entity, EntityDamageEvent event) {
         entity.damage(event.getDamage());
     }

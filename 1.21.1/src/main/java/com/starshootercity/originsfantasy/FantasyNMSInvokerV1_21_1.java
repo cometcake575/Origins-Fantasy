@@ -18,10 +18,15 @@ import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FantasyNMSInvokerV1_20_5 extends FantasyNMSInvoker {
+public class FantasyNMSInvokerV1_21_1 extends FantasyNMSInvoker {
     @Override
     public void launchArrow(Entity projectile, Entity entity, float roll, float force, float divergence) {
         ((AbstractProjectile) projectile).getHandle().shootFromRotation(((CraftEntity) entity).getHandle(), entity.getPitch(), entity.getYaw(), roll, force, divergence);
+    }
+
+    @Override
+    public @NotNull Attribute getAttackSpeedAttribute() {
+        return Attribute.GENERIC_ATTACK_SPEED;
     }
 
     @Override

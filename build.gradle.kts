@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.starshootercity.originsfantasy"
-version = "1.0.5"
+version = "1.0.21"
 
 repositories {
     mavenCentral()
@@ -18,9 +18,10 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
     implementation(project(":core"))
     implementation(project(":version"))
+    implementation(project(":1.21.1", "reobf"))
+    implementation(project(":1.21.3", "reobf"))
     implementation(project(":1.21", "reobf"))
     implementation(project(":1.20.6", "reobf"))
-    implementation(project(":1.20.5", "reobf"))
     implementation(project(":1.20.4", "reobf"))
     implementation(project(":1.20.3", "reobf"))
     implementation(project(":1.20.2", "reobf"))

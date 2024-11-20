@@ -32,7 +32,7 @@ public class MagicResistance implements VisibleAbility, Listener {
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         AbilityRegister.runForAbility(event.getEntity(), getKey(), () -> {
-            if (event.getCause() == EntityDamageEvent.DamageCause.MAGIC) event.setCancelled(true);
+            if (event.getCause().equals(EntityDamageEvent.DamageCause.MAGIC)) event.setCancelled(true);
         });
     }
 
@@ -40,7 +40,7 @@ public class MagicResistance implements VisibleAbility, Listener {
     public void onEntityPotionEffect(EntityPotionEffectEvent event) {
         if (event.getNewEffect() == null) return;
         AbilityRegister.runForAbility(event.getEntity(), getKey(), () -> {
-            if (event.getNewEffect().getType() == PotionEffectType.POISON) event.setCancelled(true);
+            if (event.getNewEffect().getType().equals(PotionEffectType.POISON)) event.setCancelled(true);
         });
     }
 }

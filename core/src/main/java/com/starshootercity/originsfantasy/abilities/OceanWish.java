@@ -1,6 +1,7 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.starshootercity.OriginSwapper;
+import com.starshootercity.OriginsReborn;
 import com.starshootercity.abilities.Ability;
 import com.starshootercity.abilities.AttributeModifierAbility;
 import com.starshootercity.abilities.MultiAbility;
@@ -39,12 +40,17 @@ public class OceanWish implements VisibleAbility, MultiAbility {
 
         @Override
         public @NotNull Attribute getAttribute() {
-            return Attribute.GENERIC_ATTACK_DAMAGE;
+            return OriginsReborn.getNMSInvoker().getAttackDamageAttribute();
         }
 
         @Override
         public double getAmount() {
-            return -1.2;
+            return 0;
+        }
+
+        @Override
+        public double getChangedAmount(Player player) {
+            return -0.4;
         }
 
         @Override
@@ -68,7 +74,7 @@ public class OceanWish implements VisibleAbility, MultiAbility {
 
         @Override
         public @NotNull Attribute getAttribute() {
-            return Attribute.GENERIC_MAX_HEALTH;
+            return OriginsReborn.getNMSInvoker().getMaxHealthAttribute();
         }
 
         @Override
@@ -100,7 +106,7 @@ public class OceanWish implements VisibleAbility, MultiAbility {
 
         @Override
         public @NotNull Attribute getAttribute() {
-            return Attribute.GENERIC_MOVEMENT_SPEED;
+            return OriginsReborn.getNMSInvoker().getMovementSpeedAttribute();
         }
 
         @Override

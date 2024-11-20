@@ -1,9 +1,10 @@
 rootProject.name = "Origins-Fantasy"
 include("version")
 include("core")
+include("1.21.1")
+include("1.21.3")
 include("1.21")
 include("1.20.6")
-include("1.20.5")
 include("1.20.4")
 include("1.20.3")
 include("1.20.2")

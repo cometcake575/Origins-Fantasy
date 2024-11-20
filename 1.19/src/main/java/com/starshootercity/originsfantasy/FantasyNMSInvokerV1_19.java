@@ -47,6 +47,11 @@ public class FantasyNMSInvokerV1_19 extends FantasyNMSInvoker {
     }
 
     @Override
+    public @NotNull Attribute getAttackSpeedAttribute() {
+        return Attribute.GENERIC_ATTACK_SPEED;
+    }
+
+    @Override
     public @NotNull Attribute getGenericJumpStrengthAttribute() {
         return Attribute.HORSE_JUMP_STRENGTH;
     }

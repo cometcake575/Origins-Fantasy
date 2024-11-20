@@ -16,7 +16,7 @@ import java.util.List;
 public class IncreasedArrowSpeed implements VisibleAbility, Listener {
     @Override
     public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("Arrows you shoot are 3 times faster than ones shot by a regular human.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+        return OriginSwapper.LineData.makeLineFor("Arrows you shoot are twice as fast than ones shot by a regular human.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
     }
 
     @Override
@@ -31,6 +31,7 @@ public class IncreasedArrowSpeed implements VisibleAbility, Listener {
 
     @EventHandler
     public void onEntityShootBow(EntityShootBowEvent event) {
-        AbilityRegister.runForAbility(event.getEntity(), getKey(), () -> Bukkit.getScheduler().scheduleSyncDelayedTask(OriginsFantasy.getInstance(), () -> event.getProjectile().setVelocity(event.getProjectile().getVelocity().multiply(3))));
+        int v = OriginsFantasy.getInstance().getConfig().getInt("arrow-speed-multiplier", 2);
+        AbilityRegister.runForAbility(event.getEntity(), getKey(), () -> Bukkit.getScheduler().scheduleSyncDelayedTask(OriginsFantasy.getInstance(), () -> event.getProjectile().setVelocity(event.getProjectile().getVelocity().multiply(v))));
     }
 }

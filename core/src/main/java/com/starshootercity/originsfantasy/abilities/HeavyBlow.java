@@ -1,10 +1,12 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.starshootercity.OriginSwapper;
+import com.starshootercity.OriginsReborn;
 import com.starshootercity.abilities.Ability;
 import com.starshootercity.abilities.AttributeModifierAbility;
 import com.starshootercity.abilities.MultiAbility;
 import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.originsfantasy.OriginsFantasy;
 import net.kyori.adventure.key.Key;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -39,7 +41,7 @@ public class HeavyBlow implements VisibleAbility, MultiAbility {
 
         @Override
         public @NotNull Attribute getAttribute() {
-            return Attribute.GENERIC_ATTACK_DAMAGE;
+            return OriginsReborn.getNMSInvoker().getAttackDamageAttribute();
         }
 
         @Override
@@ -63,7 +65,7 @@ public class HeavyBlow implements VisibleAbility, MultiAbility {
 
         @Override
         public @NotNull Attribute getAttribute() {
-            return Attribute.GENERIC_ATTACK_SPEED;
+            return OriginsFantasy.getNMSInvoker().getAttackSpeedAttribute();
         }
 
         @Override

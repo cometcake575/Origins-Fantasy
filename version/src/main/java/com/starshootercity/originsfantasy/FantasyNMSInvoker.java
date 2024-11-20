@@ -19,6 +19,8 @@ public abstract class FantasyNMSInvoker implements Listener {
 
     public abstract Attribute getGenericScaleAttribute();
 
+    public abstract @NotNull Attribute getAttackSpeedAttribute();
+
     public abstract @NotNull Attribute getGenericJumpStrengthAttribute();
 
     public abstract boolean duplicateAllay(Allay allay);

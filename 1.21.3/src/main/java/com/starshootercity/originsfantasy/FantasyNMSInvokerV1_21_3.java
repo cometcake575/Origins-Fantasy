@@ -1,13 +1,10 @@
 package com.starshootercity.originsfantasy;
 
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R1.entity.AbstractProjectile;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftAllay;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftArrow;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.AbstractProjectile;
+import org.bukkit.craftbukkit.entity.CraftAllay;
+import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Allay;
 import org.bukkit.entity.Arrow;
@@ -15,44 +12,45 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDismountEvent;
+import org.bukkit.event.entity.EntityMountEvent;
+import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.spigotmc.event.entity.EntityDismountEvent;
-import org.spigotmc.event.entity.EntityMountEvent;
 
-public class FantasyNMSInvokerV1_19_2 extends FantasyNMSInvoker {
+public class FantasyNMSInvokerV1_21_3 extends FantasyNMSInvoker {
     @Override
     public void launchArrow(Entity projectile, Entity entity, float roll, float force, float divergence) {
-        ((AbstractProjectile) projectile).getHandle().shootFromRotation(((CraftEntity) entity).getHandle(), entity.getLocation().getPitch(), entity.getLocation().getYaw(), roll, force, divergence);
+        ((AbstractProjectile) projectile).getHandle().shootFromRotation(((CraftEntity) entity).getHandle(), entity.getPitch(), entity.getYaw(), roll, force, divergence);
     }
 
     @Override
     public @NotNull Attribute getAttackSpeedAttribute() {
-        return Attribute.GENERIC_ATTACK_SPEED;
+        return Attribute.ATTACK_SPEED;
     }
 
     @Override
+    @SuppressWarnings("UnstableApiUsage")
     public void transferDamageEvent(LivingEntity entity, EntityDamageEvent event) {
-        entity.damage(event.getDamage());
+        entity.damage(event.getDamage(), event.getDamageSource());
     }
 
     @Override
     public void boostArrow(Arrow arrow) {
-        if (((CraftArrow) arrow).getHandle() instanceof net.minecraft.world.entity.projectile.Arrow a) {
-            for (MobEffectInstance instance : PotionUtils.getPotion(a.getPickupItem()).getEffects()) {
-                a.addEffect(new MobEffectInstance(instance.getEffect(), instance.getDuration(), instance.getAmplifier() + 1));
-            }
+        if (arrow.getBasePotionType() == null) return;
+        for (PotionEffect effect : arrow.getBasePotionType().getPotionEffects()) {
+            arrow.addCustomEffect(effect.withDuration(effect.getDuration()).withAmplifier(effect.getAmplifier()+1), true);
         }
     }
 
     @Override
     public @Nullable Attribute getGenericScaleAttribute() {
-        return null;
+        return Attribute.SCALE;
     }
 
     @Override
     public @NotNull Attribute getGenericJumpStrengthAttribute() {
-        return Attribute.HORSE_JUMP_STRENGTH;
+        return Attribute.JUMP_STRENGTH;
     }
 
     @Override
@@ -65,7 +63,7 @@ public class FantasyNMSInvokerV1_19_2 extends FantasyNMSInvoker {
 
     @Override
     public @NotNull Enchantment getFortuneEnchantment() {
-        return Enchantment.LOOT_BONUS_BLOCKS;
+        return Enchantment.FORTUNE;
     }
 
     @EventHandler
