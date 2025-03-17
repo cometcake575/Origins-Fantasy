@@ -4,7 +4,6 @@ import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import com.starshootercity.Origin;
 import com.starshootercity.OriginSwapper;
 import com.starshootercity.OriginsReborn;
-import com.starshootercity.abilities.AbilityRegister;
 import com.starshootercity.abilities.VisibleAbility;
 import com.starshootercity.events.PlayerSwapOriginEvent;
 import com.starshootercity.originsfantasy.FantasyEntityDismountEvent;
@@ -29,17 +28,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class PermanentHorse implements VisibleAbility, Listener {
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("You are half horse, half human.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "You are half horse, half human.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Half Horse", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Half Horse";
     }
 
     @Override
@@ -50,7 +47,7 @@ public class PermanentHorse implements VisibleAbility, Listener {
     @EventHandler
     public void onEntityDismount(FantasyEntityDismountEvent event) {
         if (event.getEntity().isDead()) return;
-        AbilityRegister.runForAbility(event.getEntity(), getKey(), () -> {
+        runForAbility(event.getEntity(), player -> {
             event.setCancelled(true);
             Entity vehicle = event.getDismounted().getVehicle();
             if (vehicle != null) vehicle.removePassenger(event.getDismounted());
@@ -60,17 +57,17 @@ public class PermanentHorse implements VisibleAbility, Listener {
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         if (event.getPlayer().getPersistentDataContainer().has(teleportingKey)) return;
-        AbilityRegister.runForAbility(event.getPlayer(), getKey(), () -> {
-            Entity e = event.getPlayer().getVehicle();
+        runForAbility(event.getPlayer(), player -> {
+            Entity e = player.getVehicle();
             if (e != null) {
-                e.removePassenger(event.getPlayer());
-                event.getPlayer().getPersistentDataContainer().set(teleportingKey, PersistentDataType.BOOLEAN, true);
+                e.removePassenger(player);
+                player.getPersistentDataContainer().set(teleportingKey, OriginSwapper.BooleanPDT.BOOLEAN, true);
                 event.setCancelled(true);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(OriginsFantasy.getInstance(), () -> {
-                    event.getPlayer().teleport(event.getTo(), event.getCause());
+                    player.teleport(event.getTo(), event.getCause());
                     e.teleport(event.getTo(), event.getCause());
-                    e.addPassenger(event.getPlayer());
-                    event.getPlayer().getPersistentDataContainer().remove(teleportingKey);
+                    e.addPassenger(player);
+                    player.getPersistentDataContainer().remove(teleportingKey);
                 });
             }
         });
@@ -78,11 +75,11 @@ public class PermanentHorse implements VisibleAbility, Listener {
 
     @EventHandler
     public void onEntityMount(FantasyEntityMountEvent event) {
-        AbilityRegister.runForAbility(event.getEntity(), getKey(), () -> {
+        runForAbility(event.getEntity(), player -> {
             if (!event.getMount().getPersistentDataContainer().getOrDefault(key, PersistentDataType.STRING, "").equals(event.getEntity().getUniqueId().toString())) {
                 event.setCancelled(true);
                 if (!(event.getMount() instanceof LivingEntity)) {
-                    Entity vehicle = event.getEntity().getVehicle();
+                    Entity vehicle = player.getVehicle();
                     if (vehicle != null) event.getMount().addPassenger(vehicle);
                 }
             }
@@ -92,15 +89,15 @@ public class PermanentHorse implements VisibleAbility, Listener {
     @EventHandler
     public void onServerTickEnd(ServerTickEndEvent event) {
         if (event.getTickNumber() % 20 != 0) return;
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.isDead()) continue;
-            AbilityRegister.runForAbility(player, getKey(), () -> {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.isDead()) continue;
+            runForAbility(p, player -> {
                 if (player.getPersistentDataContainer().has(teleportingKey)) return;
                 if (player.getVehicle() != null) return;
                 Horse horse = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
                 AttributeInstance jump = horse.getAttribute(OriginsFantasy.getNMSInvoker().getGenericJumpStrengthAttribute());
                 AttributeInstance speed = horse.getAttribute(OriginsReborn.getNMSInvoker().getMovementSpeedAttribute());
-                Origin origin = OriginSwapper.getOrigin(player);
+                Origin origin = OriginSwapper.getOrigin(player, "origin");
                 if (origin != null) {
                     if (origin.hasAbility(Key.key("fantasyorigins:super_jump")) && jump != null) jump.setBaseValue(1);
                     if (origin.hasAbility(Key.key("fantasyorigins:increased_speed")) && speed != null)speed.setBaseValue(0.4);
@@ -127,8 +124,8 @@ public class PermanentHorse implements VisibleAbility, Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        AbilityRegister.runForAbility(event.getEntity(), getKey(), () -> {
-            Entity vehicle = event.getEntity().getVehicle();
+        runForAbility(event.getEntity(), player -> {
+            Entity vehicle = player.getVehicle();
             if (vehicle != null && vehicle.getPersistentDataContainer().has(key)) vehicle.remove();
         });
     }
@@ -141,7 +138,7 @@ public class PermanentHorse implements VisibleAbility, Listener {
 
     @EventHandler
     public void onPlayerBedEnter(PlayerBedEnterEvent event) {
-        AbilityRegister.runForAbility(event.getPlayer(), getKey(), () -> event.setUseBed(Event.Result.DENY));
+        runForAbility(event.getPlayer(), player -> event.setUseBed(Event.Result.DENY));
     }
 
     @EventHandler

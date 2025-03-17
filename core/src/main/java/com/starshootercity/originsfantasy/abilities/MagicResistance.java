@@ -1,7 +1,5 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.OriginSwapper;
-import com.starshootercity.abilities.AbilityRegister;
 import com.starshootercity.abilities.VisibleAbility;
 import net.kyori.adventure.key.Key;
 import org.bukkit.event.EventHandler;
@@ -11,17 +9,15 @@ import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class MagicResistance implements VisibleAbility, Listener {
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("You have an immunity to poison and harming potion effects.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "You have an immunity to poison and harming potion effects.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Iron Stomach", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Iron Stomach";
     }
 
     @Override
@@ -31,7 +27,7 @@ public class MagicResistance implements VisibleAbility, Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        AbilityRegister.runForAbility(event.getEntity(), getKey(), () -> {
+        runForAbility(event.getEntity(), player -> {
             if (event.getCause().equals(EntityDamageEvent.DamageCause.MAGIC)) event.setCancelled(true);
         });
     }
@@ -39,7 +35,7 @@ public class MagicResistance implements VisibleAbility, Listener {
     @EventHandler
     public void onEntityPotionEffect(EntityPotionEffectEvent event) {
         if (event.getNewEffect() == null) return;
-        AbilityRegister.runForAbility(event.getEntity(), getKey(), () -> {
+        runForAbility(event.getEntity(), player -> {
             if (event.getNewEffect().getType().equals(PotionEffectType.POISON)) event.setCancelled(true);
         });
     }

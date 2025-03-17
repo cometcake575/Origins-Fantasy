@@ -1,9 +1,8 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.OriginSwapper;
-import com.starshootercity.abilities.AbilityRegister;
 import com.starshootercity.abilities.VisibleAbility;
 import com.starshootercity.originsfantasy.OriginsFantasy;
+import com.starshootercity.util.config.ConfigManager;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -19,13 +18,13 @@ import java.util.*;
 
 public class FortuneIncreaser implements VisibleAbility, Listener {
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("Your care and mastery in the art of extracting minerals results in a much higher yield from ores than other creatures.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "Your care and mastery in the art of extracting minerals results in a much higher yield from ores than other creatures.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Careful Miner", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Careful Miner";
     }
 
     @Override
@@ -36,8 +35,8 @@ public class FortuneIncreaser implements VisibleAbility, Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockDropItem(BlockDropItemEvent event) {
         if (event.getPlayer().getInventory().getItemInMainHand().getItemMeta() == null) return;
-        AbilityRegister.runForAbility(event.getPlayer(), getKey(), () -> {
-            List<ItemStack> items = new ArrayList<>(blocks.getOrDefault(event.getPlayer(), List.of()));
+        runForAbility(event.getPlayer(), player -> {
+            List<ItemStack> items = new ArrayList<>(blocks.getOrDefault(player, List.of()));
             List<ItemStack> otherItems = new ArrayList<>();
             for (Item item : event.getItems()) {
                 otherItems.add(item.getItemStack());
@@ -66,9 +65,16 @@ public class FortuneIncreaser implements VisibleAbility, Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         ItemStack i = event.getPlayer().getInventory().getItemInMainHand().clone();
         if (i.getItemMeta() == null) return;
-        i.addUnsafeEnchantment(OriginsFantasy.getNMSInvoker().getFortuneEnchantment(), i.getEnchantmentLevel(OriginsFantasy.getNMSInvoker().getFortuneEnchantment()) + 2);
+        i.addUnsafeEnchantment(OriginsFantasy.getNMSInvoker().getFortuneEnchantment(), i.getEnchantmentLevel(OriginsFantasy.getNMSInvoker().getFortuneEnchantment()) + getConfigOption(OriginsFantasy.getInstance(), fortuneIncrease, ConfigManager.SettingType.INTEGER));
         blocks.put(event.getPlayer(), event.getBlock().getDrops(i, event.getPlayer()));
     }
 
     private final Map<Player, Collection<ItemStack>> blocks = new HashMap<>();
+
+    private final String fortuneIncrease = "fortune_increase";
+
+    @Override
+    public void initialize() {
+        registerConfigOption(OriginsFantasy.getInstance(), fortuneIncrease, Collections.singletonList("Level to increase Fortune by"), ConfigManager.SettingType.INTEGER, 2);
+    }
 }

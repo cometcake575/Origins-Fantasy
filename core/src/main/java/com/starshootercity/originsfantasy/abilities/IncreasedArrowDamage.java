@@ -1,9 +1,9 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.starshootercity.OriginSwapper;
-import com.starshootercity.abilities.AbilityRegister;
 import com.starshootercity.abilities.VisibleAbility;
 import com.starshootercity.originsfantasy.OriginsFantasy;
+import com.starshootercity.util.config.ConfigManager;
 import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
@@ -12,17 +12,17 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Collections;
 
 public class IncreasedArrowDamage implements VisibleAbility, Listener {
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("All arrows you shoot deal increased damage.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "All arrows you shoot deal increased damage.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Piercing Shot", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Piercing Shot";
     }
 
     @Override
@@ -34,14 +34,21 @@ public class IncreasedArrowDamage implements VisibleAbility, Listener {
 
     @EventHandler
     public void onEntityShootBow(EntityShootBowEvent event) {
-        AbilityRegister.runForAbility(event.getEntity(), getKey(), () -> event.getProjectile().getPersistentDataContainer().set(key, OriginSwapper.BooleanPDT.BOOLEAN, true));
+        runForAbility(event.getEntity(), player -> event.getProjectile().getPersistentDataContainer().set(key, OriginSwapper.BooleanPDT.BOOLEAN, true));
     }
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager().getPersistentDataContainer().has(key)) {
-            int v = OriginsFantasy.getInstance().getConfig().getInt("arrow-damage-increase", 3);
+            double v = getConfigOption(OriginsFantasy.getInstance(), arrowDamageIncrease, ConfigManager.SettingType.DOUBLE);
             event.setDamage(event.getDamage() + v);
         }
+    }
+
+    private final String arrowDamageIncrease = "arrow_damage_increase";
+
+    @Override
+    public void initialize() {
+        registerConfigOption(OriginsFantasy.getInstance(), arrowDamageIncrease, Collections.singletonList("Amount to add to arrow damage"), ConfigManager.SettingType.DOUBLE, 3d);
     }
 }

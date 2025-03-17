@@ -1,8 +1,6 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
-import com.starshootercity.OriginSwapper;
-import com.starshootercity.abilities.AbilityRegister;
 import com.starshootercity.abilities.VisibleAbility;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
@@ -13,17 +11,15 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class InfiniteNightVision implements VisibleAbility, Listener {
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("You can see in the dark after generations of evolution.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "You can see in the dark after generations of evolution.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Dark Eyes", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Dark Eyes";
     }
 
     @Override
@@ -34,8 +30,8 @@ public class InfiniteNightVision implements VisibleAbility, Listener {
     @EventHandler
     public void onServerTickEnd(ServerTickEndEvent event) {
         if (event.getTickNumber() % 15 != 0) return;
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            AbilityRegister.runForAbility(player, getKey(), () -> player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 240, 0)));
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            runForAbility(p, player -> player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 240, 0)));
         }
     }
 }

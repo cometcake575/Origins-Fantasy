@@ -1,6 +1,5 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.OriginSwapper;
 import com.starshootercity.OriginsReborn;
 import com.starshootercity.abilities.Ability;
 import com.starshootercity.abilities.AttributeModifierAbility;
@@ -17,13 +16,13 @@ import java.util.List;
 
 public class EndBoost implements VisibleAbility, MultiAbility {
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("Your natural habitat is the end, so you have more health and are stronger when you are there.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "Your natural habitat is the end, so you have more health and are stronger when you are there.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("End Inhabitant", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "End Inhabitant";
     }
 
     @Override

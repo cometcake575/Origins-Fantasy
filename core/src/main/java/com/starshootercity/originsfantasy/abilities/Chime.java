@@ -1,8 +1,8 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.OriginSwapper;
-import com.starshootercity.abilities.AbilityRegister;
 import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.originsfantasy.OriginsFantasy;
+import com.starshootercity.util.config.ConfigManager;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -13,17 +13,17 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Collections;
 
 public class Chime implements VisibleAbility, Listener {
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("You can absorb the chime of amethyst shards to regenerate health.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "You can absorb the chime of amethyst shards to regenerate health.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Chime", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Chime";
     }
 
     @Override
@@ -33,16 +33,23 @@ public class Chime implements VisibleAbility, Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        AbilityRegister.runForAbility(event.getPlayer(), getKey(), () -> {
+        runForAbility(event.getPlayer(), player -> {
             if (!event.getAction().isRightClick()) return;
             if (event.getItem() == null) return;
             if (event.getItem().getType() == Material.AMETHYST_SHARD) {
                 event.getItem().setAmount(event.getItem().getAmount() - 1);
-                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 900, 1));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, getConfigOption(OriginsFantasy.getInstance(), regenerationTime, ConfigManager.SettingType.INTEGER), 1));
                 if (event.getHand() == null) return;
-                if (event.getHand() == EquipmentSlot.HAND) event.getPlayer().swingMainHand();
-                else event.getPlayer().swingOffHand();
+                if (event.getHand() == EquipmentSlot.HAND) player.swingMainHand();
+                else player.swingOffHand();
             }
         });
+    }
+
+    private final String regenerationTime = "regeneration_time";
+
+    @Override
+    public void initialize() {
+        registerConfigOption(OriginsFantasy.getInstance(), regenerationTime, Collections.singletonList("Time in ticks the regeneration effect should last"), ConfigManager.SettingType.INTEGER, 900);
     }
 }

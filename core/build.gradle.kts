@@ -1,6 +1,5 @@
 plugins {
     id("java")
-    id("io.papermc.paperweight.userdev")
 }
 
 repositories {
@@ -28,8 +27,8 @@ dependencies {
     compileOnly(project(":1.21"))
     compileOnly(project(":1.21.1"))
     compileOnly(project(":1.21.3"))
-    compileOnly(files("libs/Origins-Reborn-2.3.29-all.jar"))
-    paperweight.paperDevBundle("1.21.3-R0.1-SNAPSHOT")
+    compileOnly(project(":1.21.4"))
+    compileOnly(files("libs/Origins-Reborn-2.5.0-all.jar"))
 }
 
 java {

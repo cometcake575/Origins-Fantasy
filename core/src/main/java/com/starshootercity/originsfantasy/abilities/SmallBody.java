@@ -1,6 +1,5 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.OriginSwapper;
 import com.starshootercity.abilities.AttributeModifierAbility;
 import com.starshootercity.abilities.VisibleAbility;
 import com.starshootercity.originsfantasy.OriginsFantasy;
@@ -9,17 +8,15 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class SmallBody implements VisibleAbility, AttributeModifierAbility {
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("You're only one block tall, half as tall as a regular human.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "You're only one block tall, half as tall as a regular human.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Small Body", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Small Body";
     }
 
     @Override

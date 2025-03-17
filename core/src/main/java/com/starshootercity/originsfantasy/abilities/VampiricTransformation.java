@@ -1,10 +1,10 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.starshootercity.OriginSwapper;
-import com.starshootercity.abilities.AbilityRegister;
 import com.starshootercity.abilities.VisibleAbility;
 import com.starshootercity.events.PlayerSwapOriginEvent;
 import com.starshootercity.originsfantasy.OriginsFantasy;
+import com.starshootercity.util.config.ConfigManager;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -14,7 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Random;
 
 public class VampiricTransformation implements VisibleAbility, Listener {
@@ -24,13 +24,13 @@ public class VampiricTransformation implements VisibleAbility, Listener {
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor(OriginsFantasy.getInstance().getConfig().getDouble("vampire-transform-chance", 1) >= 1 ? "You can transform other players into vampires by killing them." : "You sometimes transform other players into vampires by killing them.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "You can transform other players into vampires by killing them.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Vampiric Transformation", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Vampiric Transformation";
     }
 
     private final Random random = new Random();
@@ -39,12 +39,19 @@ public class VampiricTransformation implements VisibleAbility, Listener {
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof Player player) {
             if (event.getEntity().getKiller() == null) return;
-            AbilityRegister.runForAbility(event.getEntity().getKiller(), getKey(), () -> {
-                if (random.nextDouble() <= OriginsFantasy.getInstance().getConfig().getDouble("vampire-transform-chance", 1)) {
-                    OriginSwapper.setOrigin(player, OriginSwapper.getOrigin(player), PlayerSwapOriginEvent.SwapReason.DIED, false);
+            runForAbility(event.getEntity().getKiller(), pl -> {
+                if (random.nextDouble() <= getConfigOption(OriginsFantasy.getInstance(), transformChance, ConfigManager.SettingType.FLOAT)) {
+                    OriginSwapper.setOrigin(player, OriginSwapper.getOrigin(pl, "origin"), PlayerSwapOriginEvent.SwapReason.DIED, false, "origin");
                     player.sendMessage(Component.text("You have transformed into a Vampire!").color(NamedTextColor.RED));
                 }
             });
         }
+    }
+
+    private final String transformChance = "transformation_chance";
+
+    @Override
+    public void initialize() {
+        registerConfigOption(OriginsFantasy.getInstance(), transformChance, Collections.singletonList("Chance (between 0 and 1) a player will transform into a vampire when killed by one"), ConfigManager.SettingType.FLOAT, 1f);
     }
 }

@@ -1,11 +1,8 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.OriginSwapper;
 import com.starshootercity.abilities.VisibleAbility;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class SuperJump implements VisibleAbility {
 
@@ -15,12 +12,12 @@ public class SuperJump implements VisibleAbility {
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("You've trained for your whole life, so can jump much higher than a regular horse.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "You've trained for your whole life, so can jump much higher than a regular horse.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Powerful Jump", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Powerful Jump";
     }
 }

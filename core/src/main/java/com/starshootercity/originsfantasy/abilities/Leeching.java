@@ -1,8 +1,6 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.OriginSwapper;
 import com.starshootercity.OriginsReborn;
-import com.starshootercity.abilities.AbilityRegister;
 import com.starshootercity.abilities.VisibleAbility;
 import net.kyori.adventure.key.Key;
 import org.bukkit.attribute.AttributeInstance;
@@ -11,8 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class Leeching implements VisibleAbility, Listener {
     @Override
     public @NotNull Key getKey() {
@@ -20,26 +16,25 @@ public class Leeching implements VisibleAbility, Listener {
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("Upon killing a mob or player, you sap a portion of its health, healing you.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "Upon killing a mob or player, you sap a portion of its health, healing you.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Leeching", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Leeching";
     }
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
-        if (event.getEntity().getKiller() == null) return;
-        AbilityRegister.runForAbility(event.getEntity().getKiller(), getKey(), () -> {
-            AttributeInstance mH = event.getEntity().getKiller().getAttribute(OriginsReborn.getNMSInvoker().getMaxHealthAttribute());
+        runForAbility(event.getEntity().getKiller(), player -> {
+            AttributeInstance mH = player.getAttribute(OriginsReborn.getNMSInvoker().getMaxHealthAttribute());
             if (mH == null) return;
             double maxHealth = mH.getValue();
             AttributeInstance mobMH = event.getEntity().getAttribute(OriginsReborn.getNMSInvoker().getMaxHealthAttribute());
             if (mobMH == null) return;
             double mobMaxHealth = mobMH.getValue();
-            event.getEntity().getKiller().setHealth(Math.min(maxHealth, event.getEntity().getKiller().getHealth() + (mobMaxHealth / 5)));
+            player.setHealth(Math.min(maxHealth, player.getHealth() + (mobMaxHealth / 5)));
         });
     }
 }

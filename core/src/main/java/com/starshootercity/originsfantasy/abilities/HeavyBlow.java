@@ -1,6 +1,5 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.OriginSwapper;
 import com.starshootercity.OriginsReborn;
 import com.starshootercity.abilities.Ability;
 import com.starshootercity.abilities.AttributeModifierAbility;
@@ -16,13 +15,13 @@ import java.util.List;
 
 public class HeavyBlow implements VisibleAbility, MultiAbility {
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("Your attacks are stronger than humans, but you have a longer attack cooldown.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "Your attacks are stronger than humans, but you have a longer attack cooldown.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Heavy Blow", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Heavy Blow";
     }
 
     @Override

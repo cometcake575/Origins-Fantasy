@@ -1,9 +1,8 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.OriginSwapper;
-import com.starshootercity.abilities.AbilityRegister;
 import com.starshootercity.abilities.VisibleAbility;
 import com.starshootercity.originsfantasy.OriginsFantasy;
+import com.starshootercity.util.config.ConfigManager;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.entity.AbstractArrow;
@@ -14,17 +13,31 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Collections;
 
 public class BowBurst implements VisibleAbility, Listener {
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("By casting a spell on any regular arrow, you can instantly shoot 3 arrows at once using only one, but this disables your bow for 7 seconds.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "By casting a spell on any regular arrow, you can instantly shoot %s arrows at once using only one, but this disables your bow for %s seconds.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Bow Burst", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String modifyDescription(String description) {
+        return description.formatted(getConfigOption(OriginsFantasy.getInstance(), arrowCount, ConfigManager.SettingType.INTEGER), getConfigOption(OriginsFantasy.getInstance(), cooldownTime, ConfigManager.SettingType.INTEGER));
+    }
+
+    private final String arrowCount = "arrow_count";
+    private final String cooldownTime = "cooldown_time";
+
+    @Override
+    public void initialize() {
+        registerConfigOption(OriginsFantasy.getInstance(), arrowCount, Collections.singletonList("The number of arrows to fire"), ConfigManager.SettingType.INTEGER, 3);
+        registerConfigOption(OriginsFantasy.getInstance(), cooldownTime, Collections.singletonList("The time in seconds to disable the bow for"), ConfigManager.SettingType.INTEGER, 7);
+    }
+
+    @Override
+    public String title() {
+        return "Bow Burst";
     }
 
     @Override
@@ -37,28 +50,26 @@ public class BowBurst implements VisibleAbility, Listener {
         if (!event.getAction().isLeftClick()) return;
         if (event.getItem() == null || event.getItem().getType() != Material.BOW) return;
         if (event.getPlayer().getCooldown(Material.BOW) > 0) return;
-        AbilityRegister.runForAbility(event.getPlayer(), getKey(), () -> {
-            if (event.getPlayer().getInventory().contains(Material.ARROW)) {
-                for (ItemStack item : event.getPlayer().getInventory()) {
+        runForAbility(event.getPlayer(), player -> {
+            if (player.getInventory().contains(Material.ARROW)) {
+                for (ItemStack item : player.getInventory()) {
                     if (item == null) continue;
                     if (item.getType() == Material.ARROW) {
                         item.setAmount(item.getAmount() - 1);
                         break;
                     }
                 }
-                event.getPlayer().setCooldown(Material.BOW, 140);
+                player.setCooldown(Material.BOW, getConfigOption(OriginsFantasy.getInstance(), cooldownTime, ConfigManager.SettingType.INTEGER) * 20);
 
-                Arrow a1 = event.getPlayer().launchProjectile(Arrow.class);
-                Arrow a2 = event.getPlayer().launchProjectile(Arrow.class);
-                Arrow a3 = event.getPlayer().launchProjectile(Arrow.class);
-
-                OriginsFantasy.getNMSInvoker().launchArrow(a1, event.getPlayer(), 0.0F, 3, 15);
-                OriginsFantasy.getNMSInvoker().launchArrow(a1, event.getPlayer(), 0.0F, 3, 0);
-                OriginsFantasy.getNMSInvoker().launchArrow(a1, event.getPlayer(), 0.0F, 3, 15);
-
-                a1.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
-                a2.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
-                a3.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
+                int count = getConfigOption(OriginsFantasy.getInstance(), arrowCount, ConfigManager.SettingType.INTEGER);
+                int divergence = 0;
+                Arrow arrow = null;
+                for (int i = 0; i < count; i++) {
+                    if (arrow != null) arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
+                    arrow = player.launchProjectile(Arrow.class);
+                    OriginsFantasy.getNMSInvoker().launchArrow(arrow, player, 0.0F, 3, divergence);
+                    divergence = 15;
+                }
             }
         });
     }

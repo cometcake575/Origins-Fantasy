@@ -1,9 +1,8 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.OriginSwapper;
-import com.starshootercity.abilities.AbilityRegister;
 import com.starshootercity.abilities.VisibleAbility;
 import com.starshootercity.originsfantasy.OriginsFantasy;
+import com.starshootercity.util.config.ConfigManager;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -11,17 +10,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Collections;
 
 public class IncreasedArrowSpeed implements VisibleAbility, Listener {
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("Arrows you shoot are twice as fast than ones shot by a regular human.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "Arrows you shoot are twice as fast than ones shot by a regular human.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Masterful Speed", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Masterful Speed";
     }
 
     @Override
@@ -31,7 +30,14 @@ public class IncreasedArrowSpeed implements VisibleAbility, Listener {
 
     @EventHandler
     public void onEntityShootBow(EntityShootBowEvent event) {
-        int v = OriginsFantasy.getInstance().getConfig().getInt("arrow-speed-multiplier", 2);
-        AbilityRegister.runForAbility(event.getEntity(), getKey(), () -> Bukkit.getScheduler().scheduleSyncDelayedTask(OriginsFantasy.getInstance(), () -> event.getProjectile().setVelocity(event.getProjectile().getVelocity().multiply(v))));
+        double v = getConfigOption(OriginsFantasy.getInstance(), arrowSpeedMultiplier, ConfigManager.SettingType.DOUBLE);
+        runForAbility(event.getEntity(), player -> Bukkit.getScheduler().scheduleSyncDelayedTask(OriginsFantasy.getInstance(), () -> event.getProjectile().setVelocity(event.getProjectile().getVelocity().multiply(v))));
+    }
+
+    private final String arrowSpeedMultiplier = "arrow_speed_multiplier";
+
+    @Override
+    public void initialize() {
+        registerConfigOption(OriginsFantasy.getInstance(), arrowSpeedMultiplier, Collections.singletonList("Multiplier for the arrow's velocity"), ConfigManager.SettingType.DOUBLE, 2d);
     }
 }

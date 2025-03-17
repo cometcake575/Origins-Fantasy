@@ -1,6 +1,5 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.OriginSwapper;
 import com.starshootercity.OriginsReborn;
 import com.starshootercity.abilities.Ability;
 import com.starshootercity.abilities.AttributeModifierAbility;
@@ -16,13 +15,13 @@ import java.util.List;
 
 public class OceansGrace implements VisibleAbility, MultiAbility {
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("You are a part of the water, so you have extra health and deal extra damage when in water or rain.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "You are a part of the water, so you have extra health and deal extra damage when in water or rain.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Ocean's Grace", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Ocean's Grace";
     }
 
     @Override

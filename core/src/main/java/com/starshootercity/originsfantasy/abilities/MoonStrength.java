@@ -1,6 +1,5 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.OriginSwapper;
 import com.starshootercity.OriginsReborn;
 import com.starshootercity.abilities.AttributeModifierAbility;
 import com.starshootercity.abilities.VisibleAbility;
@@ -11,17 +10,15 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class MoonStrength implements VisibleAbility, AttributeModifierAbility {
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getDescription() {
-        return OriginSwapper.LineData.makeLineFor("You're a worshipper of the moon, so on nights with a full moon you're stronger than normal.", OriginSwapper.LineData.LineComponent.LineType.DESCRIPTION);
+    public String description() {
+        return "You're a worshipper of the moon, so on nights with a full moon you're stronger than normal.";
     }
 
     @Override
-    public @NotNull List<OriginSwapper.LineData.LineComponent> getTitle() {
-        return OriginSwapper.LineData.makeLineFor("Moon's Blessing", OriginSwapper.LineData.LineComponent.LineType.TITLE);
+    public String title() {
+        return "Moon's Blessing";
     }
 
     @Override
