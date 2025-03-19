@@ -28,7 +28,7 @@ dependencies {
     compileOnly(project(":1.21.1"))
     compileOnly(project(":1.21.3"))
     compileOnly(project(":1.21.4"))
-    compileOnly(files("libs/Origins-Reborn-2.5.0-all.jar"))
+    compileOnly(files("libs/Origins-Reborn-2.6.3-all.jar"))
 }
 
 java {

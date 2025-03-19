@@ -4,7 +4,7 @@ import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import com.starshootercity.Origin;
 import com.starshootercity.OriginSwapper;
 import com.starshootercity.OriginsReborn;
-import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.abilities.types.VisibleAbility;
 import com.starshootercity.events.PlayerSwapOriginEvent;
 import com.starshootercity.originsfantasy.FantasyEntityDismountEvent;
 import com.starshootercity.originsfantasy.FantasyEntityMountEvent;

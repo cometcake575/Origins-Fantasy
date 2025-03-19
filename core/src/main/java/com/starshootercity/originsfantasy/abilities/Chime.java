@@ -1,6 +1,6 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.abilities.types.VisibleAbility;
 import com.starshootercity.originsfantasy.OriginsFantasy;
 import com.starshootercity.util.config.ConfigManager;
 import net.kyori.adventure.key.Key;
@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +50,7 @@ public class Chime implements VisibleAbility, Listener {
     private final String regenerationTime = "regeneration_time";
 
     @Override
-    public void initialize() {
+    public void initialize(JavaPlugin plugin) {
         registerConfigOption(OriginsFantasy.getInstance(), regenerationTime, Collections.singletonList("Time in ticks the regeneration effect should last"), ConfigManager.SettingType.INTEGER, 900);
     }
 }

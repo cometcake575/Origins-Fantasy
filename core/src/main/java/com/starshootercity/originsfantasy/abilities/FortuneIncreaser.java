@@ -1,6 +1,6 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.abilities.types.VisibleAbility;
 import com.starshootercity.originsfantasy.OriginsFantasy;
 import com.starshootercity.util.config.ConfigManager;
 import net.kyori.adventure.key.Key;
@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -74,7 +75,7 @@ public class FortuneIncreaser implements VisibleAbility, Listener {
     private final String fortuneIncrease = "fortune_increase";
 
     @Override
-    public void initialize() {
+    public void initialize(JavaPlugin plugin) {
         registerConfigOption(OriginsFantasy.getInstance(), fortuneIncrease, Collections.singletonList("Level to increase Fortune by"), ConfigManager.SettingType.INTEGER, 2);
     }
 }

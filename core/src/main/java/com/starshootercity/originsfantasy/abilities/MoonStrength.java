@@ -1,8 +1,8 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.starshootercity.OriginsReborn;
-import com.starshootercity.abilities.AttributeModifierAbility;
-import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.abilities.types.AttributeModifierAbility;
+import com.starshootercity.abilities.types.VisibleAbility;
 import io.papermc.paper.world.MoonPhase;
 import net.kyori.adventure.key.Key;
 import org.bukkit.attribute.Attribute;
@@ -32,12 +32,7 @@ public class MoonStrength implements VisibleAbility, AttributeModifierAbility {
     }
 
     @Override
-    public double getAmount() {
-        return 0;
-    }
-
-    @Override
-    public double getChangedAmount(Player player) {
+    public double getAmount(Player player) {
         if (!player.getWorld().isDayTime() && player.getWorld().getMoonPhase() == MoonPhase.FULL_MOON) {
             return 2.4;
         }

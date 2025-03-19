@@ -2,7 +2,7 @@ package com.starshootercity.originsfantasy.abilities;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import com.starshootercity.OriginsReborn;
-import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.abilities.types.VisibleAbility;
 import com.starshootercity.originsfantasy.OriginsFantasy;
 import com.starshootercity.util.config.ConfigManager;
 import net.kyori.adventure.key.Key;
@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -49,7 +50,7 @@ public class WaterSensitive implements VisibleAbility, Listener {
     private final String damageAmount = "damage_amount";
 
     @Override
-    public void initialize() {
+    public void initialize(JavaPlugin plugin) {
         registerConfigOption(OriginsFantasy.getInstance(), damageAmount, Collections.singletonList("Amount to damage the player by"), ConfigManager.SettingType.INTEGER, 1);
     }
 

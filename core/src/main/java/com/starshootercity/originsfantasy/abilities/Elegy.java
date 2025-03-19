@@ -1,8 +1,8 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.starshootercity.OriginsReborn;
-import com.starshootercity.abilities.AttributeModifierAbility;
-import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.abilities.types.AttributeModifierAbility;
+import com.starshootercity.abilities.types.VisibleAbility;
 import net.kyori.adventure.key.Key;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -31,17 +31,12 @@ public class Elegy implements VisibleAbility, AttributeModifierAbility {
     }
 
     @Override
-    public double getAmount() {
-        return 0;
-    }
-
-    @Override
-    public AttributeModifier.Operation getOperation() {
+    public AttributeModifier.@NotNull Operation getOperation() {
         return AttributeModifier.Operation.MULTIPLY_SCALAR_1;
     }
 
     @Override
-    public double getChangedAmount(Player player) {
+    public double getAmount(Player player) {
         return player.getHealth() <= 6 ? 2 : 0;
     }
 }

@@ -1,6 +1,6 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.abilities.types.VisibleAbility;
 import com.starshootercity.originsfantasy.OriginsFantasy;
 import com.starshootercity.util.config.ConfigManager;
 import net.kyori.adventure.key.Key;
@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -30,7 +31,7 @@ public class BowBurst implements VisibleAbility, Listener {
     private final String cooldownTime = "cooldown_time";
 
     @Override
-    public void initialize() {
+    public void initialize(JavaPlugin plugin) {
         registerConfigOption(OriginsFantasy.getInstance(), arrowCount, Collections.singletonList("The number of arrows to fire"), ConfigManager.SettingType.INTEGER, 3);
         registerConfigOption(OriginsFantasy.getInstance(), cooldownTime, Collections.singletonList("The time in seconds to disable the bow for"), ConfigManager.SettingType.INTEGER, 7);
     }

@@ -1,7 +1,7 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.starshootercity.OriginSwapper;
-import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.abilities.types.VisibleAbility;
 import com.starshootercity.events.PlayerSwapOriginEvent;
 import com.starshootercity.originsfantasy.OriginsFantasy;
 import com.starshootercity.util.config.ConfigManager;
@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -51,7 +52,7 @@ public class VampiricTransformation implements VisibleAbility, Listener {
     private final String transformChance = "transformation_chance";
 
     @Override
-    public void initialize() {
+    public void initialize(JavaPlugin plugin) {
         registerConfigOption(OriginsFantasy.getInstance(), transformChance, Collections.singletonList("Chance (between 0 and 1) a player will transform into a vampire when killed by one"), ConfigManager.SettingType.FLOAT, 1f);
     }
 }

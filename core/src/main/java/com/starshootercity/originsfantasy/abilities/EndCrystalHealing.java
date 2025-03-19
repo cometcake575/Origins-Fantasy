@@ -1,7 +1,7 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
-import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.abilities.types.VisibleAbility;
 import com.starshootercity.originsfantasy.OriginsFantasy;
 import com.starshootercity.util.config.ConfigManager;
 import net.kyori.adventure.key.Key;
@@ -11,6 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -38,9 +39,9 @@ public class EndCrystalHealing implements VisibleAbility, Listener {
             if (p.isDead()) continue;
             runForAbility(p, player -> {
                 int range = getConfigOption(OriginsFantasy.getInstance(), crystalRange, ConfigManager.SettingType.INTEGER);
-                for (Entity entity : player.getNearbyEntities(range, range, range)) {
+                for (Entity entity : player.getNearbyEntities(range+12, range+12, range+12)) {
                     if (entity instanceof EnderCrystal crystal) {
-                        if (entity.getLocation().distance(player.getLocation()) > 12) {
+                        if (entity.getLocation().distance(player.getLocation()) > range) {
                             if (crystal.getBeamTarget() != null && crystal.getBeamTarget().distance(player.getLocation()) < 12) {
                                 crystal.setBeamTarget(null);
                             }
@@ -58,7 +59,7 @@ public class EndCrystalHealing implements VisibleAbility, Listener {
     private final String crystalRange = "crystal_range";
 
     @Override
-    public void initialize() {
+    public void initialize(JavaPlugin plugin) {
         registerConfigOption(OriginsFantasy.getInstance(), crystalRange, Collections.singletonList("Range the end crystal effect should be"), ConfigManager.SettingType.INTEGER, 48);
     }
 }

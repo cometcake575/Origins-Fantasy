@@ -1,10 +1,10 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.starshootercity.OriginsReborn;
-import com.starshootercity.abilities.Ability;
-import com.starshootercity.abilities.AttributeModifierAbility;
-import com.starshootercity.abilities.MultiAbility;
-import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.abilities.types.Ability;
+import com.starshootercity.abilities.types.AttributeModifierAbility;
+import com.starshootercity.abilities.types.MultiAbility;
+import com.starshootercity.abilities.types.VisibleAbility;
 import net.kyori.adventure.key.Key;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -43,12 +43,7 @@ public class OceansGrace implements VisibleAbility, MultiAbility {
         }
 
         @Override
-        public double getAmount() {
-            return 0;
-        }
-
-        @Override
-        public double getChangedAmount(Player player) {
+        public double getAmount(Player player) {
             if (player.isInWaterOrRainOrBubbleColumn()) {
                 return 4;
             }
@@ -80,12 +75,7 @@ public class OceansGrace implements VisibleAbility, MultiAbility {
         }
 
         @Override
-        public double getAmount() {
-            return 0;
-        }
-
-        @Override
-        public double getChangedAmount(Player player) {
+        public double getAmount(Player player) {
             if (player.isInWaterOrRainOrBubbleColumn()) {
                 return 1.4;
             }

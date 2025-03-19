@@ -1,14 +1,15 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.starshootercity.OriginsReborn;
-import com.starshootercity.abilities.Ability;
-import com.starshootercity.abilities.AttributeModifierAbility;
-import com.starshootercity.abilities.MultiAbility;
-import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.abilities.types.Ability;
+import com.starshootercity.abilities.types.AttributeModifierAbility;
+import com.starshootercity.abilities.types.MultiAbility;
+import com.starshootercity.abilities.types.VisibleAbility;
 import com.starshootercity.originsfantasy.OriginsFantasy;
 import net.kyori.adventure.key.Key;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class HeavyBlow implements VisibleAbility, MultiAbility {
         }
 
         @Override
-        public double getAmount() {
+        public double getAmount(Player player) {
             return 1.2;
         }
 
@@ -68,7 +69,7 @@ public class HeavyBlow implements VisibleAbility, MultiAbility {
         }
 
         @Override
-        public double getAmount() {
+        public double getAmount(Player player) {
             return -0.4;
         }
 

@@ -1,7 +1,7 @@
 package com.starshootercity.originsfantasy.abilities;
 
 import com.destroystokyo.paper.MaterialTags;
-import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.abilities.types.VisibleAbility;
 import com.starshootercity.originsfantasy.OriginsFantasy;
 import com.starshootercity.util.config.ConfigManager;
 import net.kyori.adventure.key.Key;
@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -55,7 +56,7 @@ public class DragonFireball implements VisibleAbility, Listener {
     private final String fireballVelocity = "fireball_velocity";
 
     @Override
-    public void initialize() {
+    public void initialize(JavaPlugin plugin) {
         registerConfigOption(OriginsFantasy.getInstance(), cooldownTime, Collections.singletonList("The cooldown in seconds between each fireball"), ConfigManager.SettingType.INTEGER, 30);
         registerConfigOption(OriginsFantasy.getInstance(), fireballVelocity, Collections.singletonList("The velocity the fireball should be given"), ConfigManager.SettingType.FLOAT, 1.2f);
     }

@@ -1,6 +1,6 @@
 package com.starshootercity.originsfantasy.abilities;
 
-import com.starshootercity.abilities.VisibleAbility;
+import com.starshootercity.abilities.types.VisibleAbility;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.Tag;
